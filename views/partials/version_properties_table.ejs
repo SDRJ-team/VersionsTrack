@@ -3,10 +3,10 @@
     <li id="{{version_data.version}}_properties_data">
         <div class="collapsible-header">Version's Properties</div>
         <div class="collapsible-body">
-            <div class="center pages-bg" ng-show="version_data.properties_pages_count > 1">
-                <a class="waves-effect waves-light btn blue darken-4" ng-disabled="version_data.properties_current_page == 1" ng-click="version_data.properties_current_page = version_data.properties_current_page - 1">Previous</a>
-                {{version_data.properties_current_page}}/{{version_data.properties_pages_count}}
-                <a class="waves-effect waves-light btn blue darken-4" ng-disabled="version_data.properties_current_page == version_data.properties_pages_count" ng-click="version_data.properties_current_page = version_data.properties_current_page + 1">Next</a>
+            <div class="center pages-bg" name="properties_paging_v{{version_data.version}}" ng-show="version_data.properties_pages_count > 1">
+                <!--<a class="waves-effect waves-light btn blue darken-4" ng-disabled="version_data.properties_current_page == 1" ng-click="version_data.properties_current_page = version_data.properties_current_page - 1">Previous</a>
+                <span class="pages-bg">{{version_data.properties_current_page}}/{{version_data.properties_pages_count}}</span>
+                <a class="waves-effect waves-light btn blue darken-4" ng-disabled="version_data.properties_current_page == version_data.properties_pages_count" ng-click="version_data.properties_current_page = version_data.properties_current_page + 1">Next</a>-->
             </div>
             <table class="highlight responsive-table centered">
                 <thead>
@@ -108,11 +108,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="center pages-bg" ng-show="version_data.properties_pages_count > 1">
-                <a class="waves-effect waves-light btn blue darken-4" ng-disabled="version_data.properties_current_page == 1" ng-click="version_data.properties_current_page = version_data.properties_current_page - 1">Previous</a>
-                {{version_data.properties_current_page}}/{{version_data.properties_pages_count}}
-                <a class="waves-effect waves-light btn blue darken-4" ng-disabled="version_data.properties_current_page == version_data.properties_pages_count" ng-click="version_data.properties_current_page = version_data.properties_current_page + 1">Next</a>
-            </div>
+            <div class="center pages-bg" name="properties_paging_v{{version_data.version}}" ng-show="version_data.properties_pages_count > 1"></div>
         </div>
     </li>
     <li id="{{version_data.version}}_properties_new">

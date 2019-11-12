@@ -1,12 +1,12 @@
 angular.module("searchM", [])
     .service("search_s", function() {
-        let _$scope, _$http, _$timeout, _$paging;
+        let _$scope, _$http, _$timeout, _$paging, _preloader;
 
-        this.init = ($scope, $http, $timeout, paging_s) => {
+        this.init = ($scope, $http, $timeout, preloader) => {
             _$http = $http;
             _$scope = $scope;
             _$timeout = $timeout;
-            _$paging = paging_s;
+            _preloader = preloader;
 
             _$scope.search = (force_update) => {
                 let route;
@@ -89,9 +89,16 @@ angular.module("searchM", [])
                         }
                     }
                 }, (response) => {
-                    response = response.data;
-                    alertify.error(response.message);
+                    let msg;
+                    if (response.data) {
+                        response = response.data;
+                        msg = response.message;
+                    } else {
+                        msg = "Connection error";
+                    }
+                    alertify.error(msg);
                 }).finally(() => {
+                    _preloader.stop();
                     _$timeout(() => {
                         _$scope.search();
                     }, 2000);

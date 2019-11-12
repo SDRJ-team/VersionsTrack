@@ -13,6 +13,7 @@
     <script type="text/javascript" src="/resources/js/angularjs-sanitize.min.js"></script>
     <script type="text/javascript" src="/resources/js/angular-animate.js"></script>
     <script type="text/javascript" src="/resources/js/materialize.js"></script>
+    <script type="text/javascript" src="/resources/js/materialize-pagination.js"></script>
     <script type="text/javascript" src="/resources/js/alertify.js"></script>
     <script type="text/javascript" src="/resources/js/lightbox.js"></script>
     <script type="text/javascript" src="/resources/js/moment.js"></script>
@@ -79,6 +80,27 @@
 
         .light, .page-footer .footer-copyright {
             font-weight: 100;
+        }
+
+        .circular-preloader {
+            position: fixed !important;
+            z-index: -1000;
+            top: 50vh;
+            left: calc(50% - 25px);
+        }
+        .circular-preloader.active {
+            z-index: 11;
+        }
+        @media only screen and (min-width : calc(992px + 1px)) {
+            .circular-preloader {
+                top: 30vh;
+            }
+        }
+        .circular-preloader.big {
+            left: calc(50% - 32px);
+        }
+        .circular-preloader.samll {
+            left: calc(50% - 18px);
         }
 
         @keyframes collapse {
