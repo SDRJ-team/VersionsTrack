@@ -3,7 +3,18 @@
     <li id="{{version_data.version}}_properties_data">
         <div class="collapsible-header">Version's Properties</div>
         <div class="collapsible-body">
-            <div class="center pages-bg" name="properties_paging_v{{version_data.version}}" ng-show="version_data.properties_pages_count > 1">
+            <div class="center pages-bg" ng-show="version_data.properties_pages_count > 1">
+                <ul class="pagination center-align">
+                    <li ng-hide="version_data.properties_current_page == 1" ng-click="version_data.properties_current_page = version_data.properties_current_page - 1">
+                        <i class="waves-effect material-icons">chevron_left</i>
+                    </li>
+                    <li ng-class="{'active': n == version_data.properties_current_page}" ng-repeat="n in [] | range_filter:version_data.properties_current_page:version_data.properties_pages_count">
+                        <a class="waves-effect" ng-click="n > 0 ? set_version_properties_page(version_data, n) : false;">{{n > 0 ? n : '...'}}</a>
+                    </li>
+                    <li ng-hide="version_data.properties_current_page == version_data.properties_pages_count" ng-click="version_data.properties_current_page = version_data.properties_current_page + 1">
+                        <i class="waves-effect material-icons">chevron_right</i>
+                    </li>
+                </ul>
                 <!--<a class="waves-effect waves-light btn blue darken-4" ng-disabled="version_data.properties_current_page == 1" ng-click="version_data.properties_current_page = version_data.properties_current_page - 1">Previous</a>
                 <span class="pages-bg">{{version_data.properties_current_page}}/{{version_data.properties_pages_count}}</span>
                 <a class="waves-effect waves-light btn blue darken-4" ng-disabled="version_data.properties_current_page == version_data.properties_pages_count" ng-click="version_data.properties_current_page = version_data.properties_current_page + 1">Next</a>-->

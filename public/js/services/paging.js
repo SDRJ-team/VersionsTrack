@@ -10,6 +10,14 @@ angular.module("pagingM", [])
             _dark_area = dark_area;
             _$scope.versions_current_page = 1;
             _$scope.versions_pages_count = 1;
+
+            _$scope.set_current_versions_page = (current_page) => {
+                _$scope.versions_current_page = current_page;
+            };
+
+            _$scope.set_version_properties_page = (version_data, current_page) => {
+                version_data.properties_current_page = current_page;
+            };
         };
 
         this.update_versions_paging = (versions, current_page) => {
@@ -20,8 +28,8 @@ angular.module("pagingM", [])
 
         this.update_properties_paging = (version_data, properties, current_page) => {
             version_data.properties_pages_count = Math.ceil(properties.length / _$scope.num_properties_for_page_model);
-            //version_data.properties_current_page = current_page;
-            $("[name='properties_paging_v" + version_data.version + "']").materializePagination({
+            version_data.properties_current_page = current_page;
+            /*$("[name='properties_paging_v" + version_data.version + "']").materializePagination({
                 align: 'center',
                 lastPage: version_data.properties_pages_count,
                 firstPage:  1,
@@ -32,7 +40,7 @@ angular.module("pagingM", [])
                     _preloader.start();
                     //scroll_to_top();
                 }
-            });
+            });*/
         };
     })
 
@@ -69,5 +77,38 @@ angular.module("pagingM", [])
             }
             paging_s.update_properties_paging(version_data, filtered, current_page);
             return filtered.slice(begin, Math.min(end, filtered.length));
+        };
+    }])
+
+    .filter("range_filter", ["paging_s", function(paging_s) {
+        return function(input, current, total) {
+            total = parseInt(total);
+            current = parseInt(current);
+            let max_visible_pages = 3;
+
+            let is_prev_ellipsis, is_next_ellipsis;
+            is_prev_ellipsis = is_next_ellipsis = false;
+
+            for (var i = 0; i < total; i++) {
+                if (i === 0 || i === total - 1) {
+                    input.push(i + 1);
+                } else if (i + 1 <= current + max_visible_pages / 2) {
+                    if (i + 1 >= current - max_visible_pages / 2) {
+                        input.push(i + 1);
+                    } else {
+                        if (!is_prev_ellipsis) {
+                            is_prev_ellipsis = true;
+                            input.push(-1);
+                        }
+                    }
+                } else {
+                    if (!is_next_ellipsis) {
+                        is_next_ellipsis = true;
+                        input.push(-2);
+                    }
+                }
+            }
+
+            return input;
         };
     }]);

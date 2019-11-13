@@ -48,7 +48,7 @@ const app = angular.module('global_app', ['ngSanitize', 'ngAnimate', 'pagingM', 
             init_materialize();
         };
 
-        $scope.$watchGroup(['versions_pages_count', 'versions_current_page'], () => {
+        /*$scope.$watchGroup(['versions_pages_count', 'versions_current_page'], () => {
             $("[name='versions_pagination']").materializePagination({
                 align: 'center',
                 lastPage: $scope.versions_pages_count,
@@ -61,7 +61,7 @@ const app = angular.module('global_app', ['ngSanitize', 'ngAnimate', 'pagingM', 
                     scroll_to_top();
                 }
             });
-        })
+        })*/
         /*global_reports_s.init($scope, $http, $timeout, $compile, reports_optional_status, preloader, soldiers_reports_s, buildings_reports_s);
         users_s.init($scope, $http, $timeout);
         guidance_bases_s.init($scope, $http, $timeout, $compile);
