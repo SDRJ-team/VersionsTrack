@@ -1,9 +1,9 @@
 /* Select Field
    ========================================================================== */
 
-select.browser-default { opacity: 1; }
+select.browser-default { display: block; }
 select {
-  opacity: 0;
+  display: none;
   background-color: $select-background;
   width: 100%;
   padding: $select-padding;

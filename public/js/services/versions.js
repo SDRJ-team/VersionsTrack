@@ -1,6 +1,6 @@
 angular.module("versionsM", [])
     .service("versions_s", function () {
-        this.init = ($scope, $http) => {
+        this.init = ($scope, $http, modals_s) => {
             $scope.new_version = () => {
                 let new_version_id = $scope.new_version_version_id;
                 let prev_version_id =    $scope.new_version_prev_version_id
@@ -15,7 +15,6 @@ angular.module("versionsM", [])
                     release_date: new Date($scope.new_version_version_release_date),
                     known_issues: $scope.new_version_version_known_issues
                 });
-                console.log(params);
 
                 if ($scope.new_version_version_downloader === "Invalid input") {
                     alertify.error("Invalid new version release date.");
@@ -57,18 +56,28 @@ angular.module("versionsM", [])
             };
 
             $scope.remove_version = (version_id) => {
-                $http({
-                    method: "POST",
-                    url: "/api/versions/remove/v" + version_id,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                }).then((response) => {
-                    response = response.data;
-                    alertify.success(response.message);
-                    $scope.search(true);
-                }, (response) => {
-                    response = response.data;
-                    alertify.error(response.message);
-                });
+                modals_s.create_new_confirmation_modal("delete_confirm_modal",
+                    "Delete version " + version_id,
+                    "After deleting this version, all features and properties will be deleted as well.",
+                    "delete version " + version_id, (ans) => {
+                        if (ans) {
+                            $http({
+                                method: "POST",
+                                url: "/api/versions/remove/v" + version_id,
+                                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                            }).then((response) => {
+                                response = response.data;
+                                alertify.success(response.message);
+                                $scope.clear_search();
+                                $scope.search(true);
+                            }, (response) => {
+                                response = response.data;
+                                alertify.error(response.message);
+                            });
+                        } else {
+                            alertify.success("Version is here to stay!");
+                        }
+                    });
             };
 
             $scope.modify_version_view_state = (version_data, state) => {

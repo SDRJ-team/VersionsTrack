@@ -4,12 +4,13 @@ angular.element(document).ready(() => {
     //document.getElementById("filter_version_release_date").valueAsDate = new Date(new Date() + " EDT");
 });
 
-const app = angular.module('global_app', ['ngSanitize', 'ngAnimate', 'pagingM', 'searchM', 'versionsM', 'versionsPropertiesM'])
+const app = angular.module('global_app', ['ngSanitize', 'ngAnimate', 'pagingM', 'searchM', 'versionsM', 'versionsPropertiesM', 'modalsM'])
 
-    .controller('body_controller', ($scope, $http, $timeout, search_s, versions_s, properties_s, paging_s, preloader, dark_area) => {
+    .controller('body_controller', ($scope, $http, $timeout, search_s, versions_s, properties_s, paging_s, modals_s, preloader, dark_area) => {
         search_s.init($scope, $http, $timeout, preloader);
-        versions_s.init($scope, $http);
+        versions_s.init($scope, $http, modals_s);
         properties_s.init($scope, $http);
+        modals_s.init($scope, preloader, dark_area);
 
         $scope.num_versions_for_page_model = 2;
         $scope.num_properties_for_page_model = 3;
@@ -47,41 +48,6 @@ const app = angular.module('global_app', ['ngSanitize', 'ngAnimate', 'pagingM', 
             }
             init_materialize();
         };
-
-        /*$scope.$watchGroup(['versions_pages_count', 'versions_current_page'], () => {
-            $("[name='versions_pagination']").materializePagination({
-                align: 'center',
-                lastPage: $scope.versions_pages_count,
-                firstPage:  1,
-                useUrlParameter: false,
-                currentPage: $scope.versions_current_page,
-                onClickCallback: function(requestedPage){
-                    $scope.versions_current_page = requestedPage;
-                    preloader.start();
-                    scroll_to_top();
-                }
-            });
-        })*/
-        /*global_reports_s.init($scope, $http, $timeout, $compile, reports_optional_status, preloader, soldiers_reports_s, buildings_reports_s);
-        users_s.init($scope, $http, $timeout);
-        guidance_bases_s.init($scope, $http, $timeout, $compile);
-        paging.init($scope);
-
-        let plus_button = {
-            actions: {
-                click: () => {
-                    $scope.buildings.clear_report_modal();
-                    $scope.soldiers.clear_report_modal();
-                }
-            },
-            classes: [
-                "modal-trigger"
-            ],
-            attributes: {
-                "data-target": "choose_plus_modal"
-            }
-        };
-        angular_init_users_pages($scope, dark_area, plus_button);*/
     })
 
     .directive('versionsUpdateD', function() { // After loading the versions run this directive

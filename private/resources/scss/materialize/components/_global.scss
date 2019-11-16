@@ -182,7 +182,10 @@ video.responsive-video {
 
     &.active a { color: #fff; }
 
-    &.active { background-color: $primary-color; }
+    &.active {
+      background-color: $pagination-active-color;
+      border-radius: 50%;
+    }
 
     &.disabled a {
       cursor: default;
@@ -219,7 +222,7 @@ video.responsive-video {
 
 // Breadcrumbs
 .breadcrumb {
-  display: inline-block;
+  //display: inline-block;
   font-size: 18px;
   color: rgba(255,255,255, .7);
 
@@ -242,7 +245,7 @@ video.responsive-video {
     font-size: 25px;
     margin: 0 10px 0 8px;
     -webkit-font-smoothing: antialiased;
-    float: left;
+    //float: left;
   }
 
   &:first-child:before {
@@ -379,15 +382,17 @@ ul.staggered-list li {
 .page-footer {
   padding-top: 20px;
   color: $footer-font-color;
-  background-color: $footer-bg-color;
+  opacity: 0.5;
+  //background-color: $footer-bg-color;
 
   .footer-copyright {
     overflow: hidden;
     min-height: 50px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 10px 0px;
+    //justify-content: space-between;
+    text-align: center;
+    padding: 0 0;
     color: $footer-copyright-font-color;
     background-color: $footer-copyright-bg-color;
   }

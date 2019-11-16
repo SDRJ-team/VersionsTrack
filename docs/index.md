@@ -1,3 +1,5 @@
+<!--[![Github All Releases](https://img.shields.io/github/downloads/korelkashri/VersionsTrack/total.svg)]()-->
+
 # About Versions Track
 Interactive web-based application to control issues & features, alongside development.
 Mark and remember old issues with versions/dates/description oriented search.
@@ -24,6 +26,7 @@ node ./app.js
 * Version properties: Unique changes that applied in specific version (e.g. Features, Solved Bugs, etc..)
 * Easy to use web-based interface, designed with [MaterializeCSS](https://materializecss.com/)
 * Versions search by version-id, version release date, and versions/properties descriptions.
+* Versions/Properties basic pagination.
 * Compatible with offline systems.
 * Cross-Platform application.
 

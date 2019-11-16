@@ -39,7 +39,7 @@
   }
 
   // Style non btn anchors
-  li > a:not(.btn):not(.btn-large):not(.btn-flat):not(.btn-floating) {
+  li > a {
     &:hover { background-color: rgba(0,0,0,.05);}
 
     color: $sidenav-font-color;

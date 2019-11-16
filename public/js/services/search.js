@@ -52,6 +52,10 @@ angular.module("searchM", [])
                     route = "/api/versions/all";
                 }
 
+                if (force_update) {
+                    _preloader.start();
+                }
+
                 let new_versions_list;
                 _$http({
                     method: "GET",

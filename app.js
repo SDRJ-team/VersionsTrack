@@ -32,20 +32,9 @@ let app = express()
 
     .set('view engine', 'ejs');
 
-
 // Setup routes
 app
     // .use(con_validator.test_session_connection)
-
-    /*.all("*self*", con_validator.require_login, (req, res, next) => {
-        let route = req.originalUrl;
-        route = route.replace("self", req.user.id);
-        if (req.method === "POST") {
-            res.redirect(307, route); // redirect to new route with POST request
-        } else {
-            res.redirect(route); // redirect to new route with GET request
-        }
-    })*/
 
     .use("/", router);
 
