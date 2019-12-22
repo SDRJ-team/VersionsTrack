@@ -1,0 +1,218 @@
+<!--All versions-->
+<div ng-hide="version_edit_progress.is_active" class="center pages-bg" name="versions_pagination" ng-show="versions_pages_count > 1">
+    <ul class="pagination center-align">
+        <li ng-hide="versions_current_page == 1" ng-click="versions_current_page = versions_current_page - 1">
+           <i class="waves-effect material-icons">chevron_left</i>
+        </li>
+        <li ng-class="{'active': n == versions_current_page}" ng-repeat="n in [] | range_filter:versions_current_page:versions_pages_count">
+            <a class="waves-effect" ng-click="n > 0 ? set_current_versions_page(n) : false;">{{n > 0 ? n : '...'}}</a>
+        </li>
+        <li ng-hide="versions_current_page == versions_pages_count" ng-click="versions_current_page = versions_current_page + 1">
+            <i class="waves-effect material-icons">chevron_right</i>
+        </li>
+    </ul>
+    <!--<a class="waves-effect waves-light btn blue darken-4" ng-disabled="versions_current_page == 1" ng-click="versions_current_page = versions_current_page - 1">Previous</a>
+    {{versions_current_page}}/{{versions_pages_count}}
+    <a class="waves-effect waves-light btn blue darken-4" ng-disabled="versions_current_page == versions_pages_count" ng-click="versions_current_page = versions_current_page + 1">Next</a>-->
+</div>
+
+<div id="versions_table" ng-repeat="version_data in versions_list
+                                    | versions_filter :
+                                    versions_current_page :
+                                    num_versions_for_page_model"
+     versions-update-d ng-hide="version_edit_progress.is_active && version_data.version != version_edit_progress.version">
+
+    <!--row: From v___ To v___ Actions-->
+    <div class="row"
+         ng-mouseenter="version_data.show_options = true"
+         ng-mouseleave="version_data.show_options = false"
+         ng-init="version_data.show_options = false">
+
+        <!--Presentation: From-->
+        <div class="col s3" ng-show="version_data.view_state">
+            <h4>From: <u ng-click="version_data.is_prev_version_exists && search_version(version_data.prev_version);"
+                         ng-style="!version_data.is_prev_version_exists &&
+                                                    {'text-decoration-line': 'line-through'} ||
+                                                    {'cursor': 'pointer'}">{{version_data.prev_version}}
+                </u>
+            </h4>
+        </div>
+        <% if (access_level >= min_access_required.modify_version) { /* >= Manager */ %>
+            <!--Modify: From field-->
+            <div class="col s4" ng-hide="version_data.view_state">
+                <div class="input-field col s11">
+                    <input id="modify_version_from_{{version_data.version}}" type="text">
+                    <label for="modify_version_from_{{version_data.version}}">Previous Version</label>
+                </div>
+            </div>
+        <% } %>
+
+        <!--Presentation: To-->
+        <div class="col s3" ng-show="version_data.view_state">
+            <h4>To: <u style="cursor: pointer" ng-click="search_version(version_data.version);">{{version_data.version}}</u>
+                <!--Beta version Presentation-->
+                <em ng-show="version_data.is_beta" style="font-size: medium; top: -11px; position: relative;" class="red-text">Beta</em>
+            </h4>
+        </div>
+        <% if (access_level >= min_access_required.modify_version) { /* >= Manager */ %>
+            <!--Modify: To field-->
+            <div class="col s4" ng-hide="version_data.view_state">
+                <div class="input-field col s11">
+                    <input id="modify_version_version_id_{{version_data.version}}" type="text">
+                    <label for="modify_version_version_id_{{version_data.version}}">[This] Version ID</label>
+                </div>
+            </div>
+        <% } %>
+
+        <!--Version Actions-->
+        <div class="col s3" ng-show="version_data.show_options || !version_data.view_state">
+            <h4></h4>
+
+            <% if (access_level >= min_access_required.delete_version) { /* >= Manager */ %>
+                <!--Remove Version-->
+                <button ng-show="version_data.view_state" class="red btn-small btn-floating waves-effect waves-light center-align" ng-click="remove_version(version_data.version)"> <!--Delete-->
+                    <i class="material-icons">delete_forever</i>
+                </button>
+            <% } %>
+
+            <% if (access_level >= min_access_required.modify_version) { /* >= Manager */ %>
+                <!--Edit Version-->
+                <button ng-show="version_data.view_state" class="btn-small blue btn-floating waves-effect waves-light center-align" ng-click="modify_version_view_state(version_data, false)"> <!--Edit-->
+                    <i class="material-icons">create</i>
+                </button>
+
+                <!--Save Version After Modification-->
+                <button ng-hide="version_data.view_state" class="btn-small blue btn-floating waves-effect waves-light center-align" ng-click="modify_version(version_data)"> <!--Save-->
+                    <i class="material-icons">check</i>
+                </button>
+
+                <!--Cancel Version Modification-->
+                <button ng-hide="version_data.view_state" class="red btn-small btn-floating waves-effect waves-light center-align" ng-click="cancel_modify_version(version_data)"> <!--Cancel-->
+                    <i class="material-icons">clear</i>
+                </button>
+            <% } %>
+        </div>
+    </div>
+    <div class="row">
+
+        <!--Version Details-->
+        <div ng-show="version_data.details != '' || !version_data.view_state">
+
+            <% if (access_level >= min_access_required.modify_version) { /* >= Manager */ %>
+                <!--Modification - Beta version-->
+                <div ng-hide="version_data.view_state" class="col s12" style="padding-left: 20px;">
+                    <label>
+                        <input type="checkbox" id="modify_version_beta_{{version_data.version}}" />
+                        <span>Beta version</span>
+                    </label>
+                </div>
+            <% } %>
+
+            <!--Presentation-->
+            <div ng-show="version_data.view_state" class="col s12">
+                <div class="col s2">
+                    <b>Details:</b>
+                </div>
+                <div class="col s10">
+                    <span>{{version_data.details}}</span>
+                </div>
+            </div>
+            <% if (access_level >= min_access_required.modify_version) { /* >= Manager */ %>
+                <div ng-hide="version_data.view_state" class="col s12">
+                    <span class="input-field col s12">
+                        <input id="modify_version_details_{{version_data.version}}" type="text">
+                        <label for="modify_version_details_{{version_data.version}}">Version Details</label>
+                    </span>
+                </div>
+            <% } %>
+        </div>
+
+        <!--Version Downloader-->
+        <div ng-show="version_data.downloader != '' || !version_data.view_state">
+            <!--Presentation-->
+            <div ng-show="version_data.view_state" class="col s12">
+                <div class="col s2">
+                    <b>Downloader:</b>
+                </div>
+                <div class="col s10">
+                    <span ng-show="version_data.view_state">{{version_data.downloader}}</span>
+                </div>
+            </div>
+            <% if (access_level >= min_access_required.modify_version) { /* >= Manager */ %>
+                <!--Modification-->
+                <div ng-hide="version_data.view_state" class="col s12">
+                    <span class="input-field col s12">
+                        <input id="modify_version_downloader_{{version_data.version}}" type="text">
+                        <label for="modify_version_downloader_{{version_data.version}}">Downloader</label>
+                    </span>
+                </div>
+            <% } %>
+        </div>
+
+        <!--Version Release Date-->
+        <div>
+            <!--Presentation-->
+            <div ng-show="version_data.view_state" class="col s12">
+                <div class="col s2">
+                    <b>Release Date:</b>
+                </div>
+                <div class="col s10">
+                    <span ng-show="version_data.view_state">{{version_data.release_date}}</span>
+                </div>
+            </div>
+            <!--Modification-->
+            <% if (access_level >= min_access_required.modify_version) { /* >= Manager */ %>
+                <div ng-hide="version_data.view_state" class="col s12">
+                    <span class="input-field col s12 m6 l2" style="min-width: 250px;">
+                        <input type="date" id="modify_version_release_date_{{version_data.version}}" data-date-format="DD/MM/YYYY">
+                        <label for="modify_version_release_date_{{version_data.version}}">Release Date</label>
+                    </span>
+                </div>
+            <% } %>
+        </div>
+
+        <!--Global Version Known Issues-->
+        <div ng-show="version_data.known_issues != '' || !version_data.view_state">
+            <!--Presentation-->
+            <div ng-show="version_data.view_state" class="col s12">
+                <div class="col s2">
+                    <b>Known Issues:</b>
+                </div>
+                <div class="col s10">
+                    <span ng-show="version_data.view_state">{{version_data.known_issues}}</span>
+                </div>
+            </div>
+            <% if (access_level >= min_access_required.modify_version) { /* >= Manager */ %>
+                <!--Modification-->
+                <div ng-hide="version_data.view_state" class="col s12">
+                    <span class="input-field inline">
+                        <input id="modify_version_known_issues_{{version_data.version}}" type="text">
+                        <label for="modify_version_known_issues_{{version_data.version}}">Known Issues</label>
+                    </span>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <!--Version Properties Table-->
+    <%include version_properties_table.ejs%>
+
+    <br><br>
+</div>
+
+<div ng-hide="version_edit_progress.is_active" class="center pages-bg" name="versions_pagination" ng-show="versions_pages_count > 1">
+    <ul class="pagination center-align">
+        <li ng-hide="versions_current_page == 1" ng-click="versions_current_page = versions_current_page - 1">
+            <i class="waves-effect material-icons">chevron_left</i>
+        </li>
+        <li ng-class="{'active': n == versions_current_page}" ng-repeat="n in [] | range_filter:versions_current_page:versions_pages_count">
+            <a class="waves-effect" ng-click="n > 0 ? set_current_versions_page(n) : false;">{{n > 0 ? n : '...'}}</a>
+        </li>
+        <li ng-hide="versions_current_page == versions_pages_count" ng-click="versions_current_page = versions_current_page + 1">
+            <i class="waves-effect material-icons">chevron_right</i>
+        </li>
+    </ul>
+    <!--<a class="waves-effect waves-light btn blue darken-4" ng-disabled="versions_current_page == 1" ng-click="versions_current_page = versions_current_page - 1">Previous</a>
+    {{versions_current_page}}/{{versions_pages_count}}
+    <a class="waves-effect waves-light btn blue darken-4" ng-disabled="versions_current_page == versions_pages_count" ng-click="versions_current_page = versions_current_page + 1">Next</a>-->
+</div>

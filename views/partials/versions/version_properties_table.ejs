@@ -1,0 +1,222 @@
+<!--Version's Properties-->
+<ul class="collapsible expandable" ng-show="version_data.view_state">
+    <li id="{{version_data.version}}_properties_data">
+        <div class="collapsible-header">Version's Properties</div>
+        <div class="collapsible-body">
+            <div class="center pages-bg" ng-show="version_data.properties_pages_count > 1">
+                <ul class="pagination center-align">
+                    <li ng-hide="version_data.properties_current_page == 1" ng-click="version_data.properties_current_page = version_data.properties_current_page - 1">
+                        <i class="waves-effect material-icons">chevron_left</i>
+                    </li>
+                    <li ng-class="{'active': n == version_data.properties_current_page}" ng-repeat="n in [] | range_filter:version_data.properties_current_page:version_data.properties_pages_count">
+                        <a class="waves-effect" ng-click="n > 0 ? set_version_properties_page(version_data, n) : false;">{{n > 0 ? n : '...'}}</a>
+                    </li>
+                    <li ng-hide="version_data.properties_current_page == version_data.properties_pages_count" ng-click="version_data.properties_current_page = version_data.properties_current_page + 1">
+                        <i class="waves-effect material-icons">chevron_right</i>
+                    </li>
+                </ul>
+                <!--<a class="waves-effect waves-light btn blue darken-4" ng-disabled="version_data.properties_current_page == 1" ng-click="version_data.properties_current_page = version_data.properties_current_page - 1">Previous</a>
+                <span class="pages-bg">{{version_data.properties_current_page}}/{{version_data.properties_pages_count}}</span>
+                <a class="waves-effect waves-light btn blue darken-4" ng-disabled="version_data.properties_current_page == version_data.properties_pages_count" ng-click="version_data.properties_current_page = version_data.properties_current_page + 1">Next</a>-->
+            </div>
+            <table class="highlight responsive-table centered">
+                <thead>
+                <tr>
+                    <th>-</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Tests Scope</th>
+                    <th>Tests Details</th>
+                    <th>Known Issuse</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="property in version_data.properties
+                               | properties_filter:
+                               version_data :
+                               version_data.properties_current_page :
+                               num_properties_for_page_model"
+                    properties-update-d toggle-active-class="toggle_active_class_properties(version_data)">
+
+                    <!--Options-->
+                    <td>
+                        <div class="row" style="min-width: 90px;">
+                            <h4></h4>
+                            <div class="col s4">
+                                <% if (access_level >= min_access_required.modify_property) { /* >= Manager */ %>
+                                    <button class="btn-small blue btn-floating waves-effect waves-light" ng-click="modify_property_view_state(property, false)" ng-show="property.view_state"> <!--Edit-->
+                                        <i class="material-icons">create</i>
+                                    </button>
+                                    <button class="btn-small btn-floating waves-effect waves-light" ng-click="modify_property(version_data.version, property._id)" ng-show="!property.view_state"> <!--Apply modifying-->
+                                        <i class="material-icons">check</i>
+                                    </button>
+                                <% } %>
+                            </div>
+                            <div class="col s2"></div>
+                            <div class="col s4">
+                                <% if (access_level >= min_access_required.delete_property) { /* >= Manager */ %>
+                                    <button class="btn-small red btn-floating waves-effect waves-light" ng-click="remove_property(version_data.version, property._id)" ng-show="property.view_state"> <!--Remove-->
+                                        <i class="material-icons">delete_forever</i>
+                                    </button>
+                                <% } %>
+                                <% if (access_level >= min_access_required.modify_property) { /* >= Manager */ %>
+                                    <button class="btn-small red btn-floating waves-effect waves-light" ng-click="modify_property_view_state(property, true)" ng-show="!property.view_state"> <!--Cancel modifying-->
+                                        <i class="material-icons">clear</i>
+                                    </button>
+                                <% } %>
+                            </div>
+                        </div>
+                    </td>
+
+                    <!--Type-->
+                    <td ng-show="property.view_state">{{property.type}}</td>
+                    <% if (access_level >= min_access_required.modify_property) { /* >= Manager */ %>
+                        <td ng-hide="property.view_state">
+                            <div class="input-field inline">
+                                <select id="modify_property_type_{{property._id}}">
+                                    <option value="Feature">Feature</option>
+                                    <option value="Fix Bug">Fix Bug</option>
+                                    <option value="Change">Change</option>
+                                    <option value="Deprecated">Deprecated</option>
+                                </select>
+                                <label for="modify_property_type_{{property._id}}">Type</label>
+                            </div>
+                        </td>
+                    <% } %>
+
+                    <!--Description-->
+                    <td ng-show="property.view_state" ng-bind-html="property.description"></td>
+                    <% if (access_level >= min_access_required.modify_property) { /* >= Manager */ %>
+                        <td ng-hide="property.view_state">
+                            <div class="input-field inline">
+                                <input id="modify_property_description_{{property._id}}" type="text">
+                                <label for="modify_property_description_{{property._id}}">Description</label>
+                            </div>
+                        </td>
+                    <% } %>
+
+                    <!--Tests Scope-->
+                    <td ng-show="property.view_state">{{property.tests_scope}}</td>
+                    <% if (access_level >= min_access_required.modify_property) { /* >= Manager */ %>
+                        <td ng-hide="property.view_state">
+                            <div class="input-field inline">
+                                <select id="modify_property_tests_scope_{{property._id}}">
+                                    <option value="None">None</option>
+                                    <option value="Partial">Partial</option>
+                                    <option value="Large">Large</option>
+                                    <option value="Full">Full</option>
+                                </select>
+                                <label for="modify_property_tests_scope_{{property._id}}">Tests Scope</label>
+                            </div>
+                        </td>
+                    <% } %>
+
+                    <!--Tests Details-->
+                    <td ng-show="property.view_state" ng-bind-html="property.tests_details || '-'"></td>
+                    <% if (access_level >= min_access_required.modify_property) { /* >= Manager */ %>
+                        <td ng-hide="property.view_state">
+                            <div class="input-field inline">
+                                <input id="modify_property_tests_details_{{property._id}}" type="text">
+                                <label for="modify_property_tests_details_{{property._id}}">Tests Details</label>
+                            </div>
+                        </td>
+                    <% } %>
+
+                    <!--Known Issues-->
+                    <td ng-show="property.view_state" class="lighten-4" ng-class="[{red: property.known_issues != ''}]" ng-bind-html="property.known_issues || '-'"></td>
+                    <% if (access_level >= min_access_required.modify_property) { /* >= Manager */ %>
+                        <td ng-hide="property.view_state">
+                            <div class="input-field inline">
+                                <input id="modify_property_known_issues_{{property._id}}" type="text">
+                                <label for="modify_property_known_issues_{{property._id}}">Known Issues</label>
+                            </div>
+                        </td>
+                    <% } %>
+                </tr>
+                </tbody>
+            </table>
+            <div class="center pages-bg" name="properties_paging_v{{version_data.version}}" ng-show="version_data.properties_pages_count > 1"></div>
+        </div>
+    </li>
+    <% if (access_level >= min_access_required.create_new_property) { /* >= Manager */ %>
+        <li ng-class="{'active': !version_data.properties.length}" ng-init="!version_data.properties.length ? toggle_active_class_properties(version_data) : undefined" id="{{version_data.version}}_properties_new">
+            <div class="collapsible-header">Add New Version's Property</div>
+            <div class="collapsible-body">
+                <table class="highlight responsive-table centered" ng-show="version_data.view_state">
+                    <thead>
+                    <tr>
+                        <th>-</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Tests Scope</th>
+                        <th>Tests Details</th>
+                        <th>Known Issuse</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--New Version's Property-->
+                    <tr>
+
+                        <!--New Property Add Button-->
+                        <td>
+                            <button class="btn-small btn-floating waves-effect waves-light" ng-click="new_property(version_data.version)">
+                                <i class="material-icons">add</i>
+                            </button>
+                        </td>
+
+                        <!--New Property Type-->
+                        <td>
+                            <div class="input-field inline" style="min-width: 90px;">
+                                <select id="new_version_property_type_{{version_data.version}}">
+                                    <option value="Feature">Feature</option>
+                                    <option value="Fix Bug">Fix Bug</option>
+                                    <option value="Change">Change</option>
+                                    <option value="Deprecated">Deprecated</option>
+                                </select>
+                                <label for="new_version_property_type_{{version_data.version}}">Type</label>
+                            </div>
+                        </td>
+
+                        <!--New Property Description-->
+                        <td>
+                            <div class="input-field inline">
+                                <input id="new_version_property_description_{{version_data.version}}" ng-model="version_data.new_property_description_model" ng-change="change_new_property(version_data.version);" type="text">
+                                <label for="new_version_property_description_{{version_data.version}}">Description</label>
+                            </div>
+                        </td>
+
+                        <!--New Property Tests Scope-->
+                        <td>
+                            <div class="input-field inline" style="min-width: 90px;">
+                                <select id="new_version_property_tests_scope_{{version_data.version}}">
+                                    <option value="None">None</option>
+                                    <option value="Partial">Partial</option>
+                                    <option value="Large">Large</option>
+                                    <option value="Full">Full</option>
+                                </select>
+                                <label for="new_version_property_tests_scope_{{version_data.version}}">Tests Scope</label>
+                            </div>
+                        </td>
+
+                        <!--New Property Tests Details-->
+                        <td>
+                            <div class="input-field inline">
+                                <input id="new_version_property_tests_details_{{version_data.version}}" ng-model="version_data.new_property_tests_details_model" ng-change="change_new_property(version_data.version);" type="text">
+                                <label for="new_version_property_tests_details_{{version_data.version}}">Tests Details</label>
+                            </div>
+                        </td>
+
+                        <!--New Property Known Issues-->
+                        <td>
+                            <div class="input-field inline">
+                                <input id="new_version_property_known_issues_{{version_data.version}}" ng-model="version_data.new_property_known_issues_model" ng-change="change_new_property(version_data.version);" type="text">
+                                <label for="new_version_property_known_issues_{{version_data.version}}">Known Issues</label>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </li>
+    <% } %>
+</ul>

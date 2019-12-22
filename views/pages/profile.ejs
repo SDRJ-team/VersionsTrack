@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="global_app" ng-cloak>
+
+<head>
+    <%include ../partials/global/basic_head.ejs%>
+    <script type="text/javascript" src="/js/pages/profile.js"></script>
+    <title>Versions Track - Profile</title>
+</head>
+<body class="rtl" ng-controller="body_controller" data-ng-init="init()">
+<!--<video style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;" src="/resources/images/background.mp4" autoplay="autoplay" loop="loop"></video>-->
+
+<%- include('../partials/global/nav', {page: 'profile', page_view_name: 'Profile'});%>
+
+<div id="page_content">
+    <br><br><br><br>
+    <div style="padding: 0 0.75rem;">
+
+    </div>
+</div>
+
+<%include ../partials/global/footer.html%>
+
+</body>
+</html>

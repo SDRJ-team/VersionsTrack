@@ -1,18 +1,19 @@
 // Import dependencies
 const express = require('express'),
 path = require('path'),
-PORT = process.env.PORT || 5000,
+PORT = process.env.PORT || 5001,
 body_parser = require('body-parser'),
 session = require('client-sessions'),
 db = require('./helpers/db_controllers/services/db'),
 router = require("./routers/router"),
 con_validator = require('./middlewares/validate_connection');
 
-
 // Setup server
 let app = express()
 
     .use(express.static(path.join(__dirname, 'public')))
+
+    .use('/scripts', express.static(__dirname + '/node_modules/mark.js/dist/'))
 
     .use(session({
         cookieName: 'session',
@@ -34,16 +35,21 @@ let app = express()
 
 // Setup routes
 app
-    // .use(con_validator.test_session_connection)
+    .use(con_validator.test_session_connection)
 
     .use("/", router);
 
 // Initialize application
-db.initDB(() => {
-    app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
+db.initDB(_ => {
+    app.listen(PORT, _ => console.log(`Listening on ${ PORT }`));
 });
 
 // Setup errors
+// Banned users
+app.get('/banned', function(req, res){
+    res.render("errors/banned")
+});
+
 //The 404 Route
 app.get('/*', function(req, res){
     res.render("errors/404")

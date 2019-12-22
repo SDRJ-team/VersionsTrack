@@ -5,6 +5,11 @@ function init_materialize() {
     collapsible.filter('.expandable').collapsible({
         accordion: false
     });
+    $('.dropdown-trigger').dropdown();
+    $('#user_options_dropdown_trigger').dropdown({
+ //       width: 140,
+        position: "static"
+    });
 }
 
 /**
@@ -18,6 +23,7 @@ function initialize_alertify_properties() {
 }
 
 function init_scroll() {
+    if (!document.getElementById("page_sticky_header")) return;
     let header_classes, sticky;
     header_classes = document.getElementById("page_sticky_header").classList;
     //sticky = header.offsetTop;
@@ -26,6 +32,7 @@ function init_scroll() {
         header_classes.remove('open');
         header_classes.remove('home');
         header_classes.add('collapse');
+        $(".dropdown-trigger").dropdown('close');
     }
 
     function upAction() {
@@ -79,6 +86,22 @@ function init_all() {
     init_scroll();
 }
 
+function ng_init_sidenav(dark_area) {
+    let sidenav_instance = $(".sidenav");
+    if (sidenav_instance) {
+        sidenav_instance.sidenav({
+            onOpenStart: function () {
+                dark_area.show(); // Show dark area (dismiss area)
+            },
+            draggable: true,
+            onCloseEnd: function () {
+                dark_area.hide(); // Hide dark area (dismiss area)
+            },
+            edge: 'left'
+        });
+    }
+}
+
 function loadScript(url, callback)
 {
     // Adding the script tag to the head as suggested before
@@ -96,8 +119,16 @@ function loadScript(url, callback)
     head.appendChild(script);
 }
 
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
 angular.element(function () { // When all angular elements are ready
     $('select').formSelect();
+    let sidenav_instance = $(".sidenav");
+    sidenav_instance.find("a[href^='#/']").bind('click', ()=>{
+        $(".dismiss_area").trigger('click');
+    });
 });
 
 (function($) {

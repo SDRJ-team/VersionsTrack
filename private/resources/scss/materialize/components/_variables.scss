@@ -28,7 +28,8 @@
 //  22. Flow Text
 //  23. Collections
 //  24. Progress Bar
-
+//  25. Pagination
+//  26. Nav List
 
 
 // 1. Colors
@@ -348,7 +349,14 @@ $collection-line-height: 1.5rem !default;
 
 $progress-bar-color: $secondary-color !default;
 
+
 // 25. Pagination
 // ==========================================================================
 
-$pagination-active-color: color("blue", "lighten-1")
+$pagination-active-color: color("blue", "lighten-1");
+
+
+// 26. Nav List
+// ==========================================================================
+
+$nav-list-link-color: #0079bd;

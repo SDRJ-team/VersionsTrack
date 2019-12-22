@@ -121,11 +121,17 @@
             },
 
             /**
-			 * Max alerts in the same time - 0 for none limit.
+			 * Max alerts in the same time - 0 for none limit. --- Korel
              */
 			maxAlerts : 2,
 
-            /**
+			/**
+			 * If true, validate if there is already an alert with identical content to the new target alert.
+			 * If there is, it won't send a new alert.
+			 */
+			useDistinct	: false,
+
+			/**
 			 * Active alerts instances.
              */
 			alertsList : [],
@@ -347,8 +353,8 @@
 					self.unbind(this, self.transition.type, transitionDone);
 					// remove log message
 					elLog.removeChild(this);
-					if (!elLog.hasChildNodes()) elLog.className += " alertify-logs-hidden"
-					this.alertsCount = this.alertsCount - 1;
+					if (!elLog.hasChildNodes()) elLog.className += " alertify-logs-hidden";
+					this.alertsCount = this.alertsCount - 1; // Update alerts count -- Korel
 				};
 				// this sets the hide class to transition out
 				// or removes the child if css transitions aren't supported
@@ -363,6 +369,17 @@
 							elLog.removeChild(el);
 							if (!elLog.hasChildNodes()) elLog.className += " alertify-logs-hidden";
 						}
+
+                        // Remove alert from the list -- Korel
+						/*for (let i = 0; i < self.alertsList.length; i++) {
+							if (el && self.alertsList[i] && self.alertsList[i].innerHTML === el.innerHTML) {
+								delete self.alertsList[i];
+								return;
+							}
+						}
+						for (let i = 0; i < self.alertsList.length; i++) {
+							delete self.alertsList[i];
+						}*/
 					}
 				};
 				// never close (until click) if wait is set to 0
@@ -536,10 +553,17 @@
 			 * @return {undefined}
 			 */
 			notify : function (message, type, wait) {
-				var log = document.createElement("article");
+				let log = document.createElement("article");
 				log.className = "alertify-log" + ((typeof type === "string" && type !== "") ? " alertify-log-" + type : "");
 				log.innerHTML = this.template(message);
 				// append child
+				/*if (this.useDistinct) { // Check for active equal alert
+					for (let i = 0; i < this.alertsList.length; i++) {
+						if (this.alertsList[i] && this.alertsList[i].innerHTML === log.innerHTML) {
+							return;
+						}
+					}
+				}*/
 				elLog.appendChild(log);
 				// triggers the CSS animation
 				setTimeout(function() { log.className = log.className + " alertify-log-show"; }, 50);

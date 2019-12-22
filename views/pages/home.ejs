@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="global_app" ng-cloak>
 
-<%include ../partials/head.ejs%>
-
-<body class="rtl" ng-controller="body_controller" data-ng-init="init()" style="">
-    <!--<video style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;" src="/resources/images/background.mp4" autoplay="autoplay" loop="loop"></video>-->
-
-    <%include ../partials/nav.ejs%>
+<head>
+    <%include ../partials/global/basic_head.ejs%>
+    <script type="text/javascript" src="/js/pages/home.js"></script>
+    <title>Versions Track - Home</title>
+</head>
+<body class="rtl" ng-controller="body_controller" data-ng-init="init()">
+    <%- include('../partials/global/nav', {page: 'versions', page_view_name: 'Versions'});%>
 
     <div id="page_content">
         <br><br><br><br>
         <div style="padding: 0 0.75rem;">
 
-            <%include ../partials/versions_table.ejs%>
+            <%include ../partials/versions/versions_table.ejs%>
 
         </div>
     </div>
 
     <%include ../partials/modals/new_version.html%>
 
-    <%include ../partials/footer.html%>
+    <%include ../partials/global/footer.html%>
 
 </body>
 </html>

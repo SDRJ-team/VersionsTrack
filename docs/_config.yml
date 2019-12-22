@@ -1,6 +1,12 @@
 theme: jekyll-theme-cayman
 show_downloads: true
 permalink: pretty
+owner:
+  name: Korel Kashri
+  #bio: "This is a sample Jekyll academic website."
+  email: korelkashri@gmail.com
+  linkedin: korel kashri
+  github: korelkashri
 plugins:
   - jekyll-seo-tag
   - jekyll-sitemap

@@ -1,3 +1,8 @@
+---
+layout: default
+
+---
+
 <!--[![Github All Releases](https://img.shields.io/github/downloads/korelkashri/VersionsTrack/total.svg)]()-->
 
 # About Versions Track
@@ -6,55 +11,157 @@ Mark and remember old issues with versions/dates/description oriented search.
 
 **Compatible with offline systems.**
 
+Table of Contents
+=================
+   * [About Versions Track](#about-versions-track)
+   * [Table of Contents](#table-of-contents)
+   * [Demo](#demo)
+   * [Dependencies](#dependencies)
+   * [Run](#run)
+      * [Access Server](#access-server)
+      * [Configuration](#configuration)
+   * [Features](#features)
+      * [Upcoming features](#upcoming-features)
+         * [Next](#next)
+   * [Pictures](#pictures)
+      * [Search section](#search-section)
+      * [Guest Access](#guest-access)
+         * [Versions Overview](#versions-overview)
+         * [Login Page](#login-page)
+      * [Manager Access](#manager-access)
+         * [Versions Overview](#versions-overview-1)
+         * [Add new version](#add-new-version)
+         * [Modify version](#modify-version)
+         * [Delete version](#delete-version)
+      * [Side Navigation Bar](#side-navigation-bar)
+      * [Admin Access](#admin-access)
+         * [Admin Panel - Users Management](#admin-panel---users-management)
+            * [View Users List](#view-users-list)
+            * [Modify User](#modify-user)
+            * [Create New User](#create-new-user)
+
+# Demo
+[demo - VersionsTrack](https://versions-track.herokuapp.com/)
+
 # Dependencies
 * [node.js](https://nodejs.org/en/).
 * [mongodb](https://www.mongodb.com/).
 
 # Run
 ```
-sudo service mongod start # make sure to start mongodb sevice
+sudo service mongod start # make sure to start mongodb service
 node ./app.js
 ```
 
-### Access Server
+## Access Server
 ```
-# On browser [chrome recommanded]: localhost:5000
+# On browser [chrome recommended]: localhost:5000
 ```
 
+## Configuration
+At the first time you run the system (v2.0.0+), admin user is automatically generated.
+```
+username: admin
+password: admin
+```
+You can modify this user after login into it using ```Sidebar -> Admin Panel -> Users Management -> admin```
+
+WARNING! Don't lose your admin user credentials.
+
 # Features
-* Versions basic identifiers: Previous version id, This version id (e.g. From: 3.0.0 To: 3.0.1)
-* Version properties: Unique changes that applied in specific version (e.g. Features, Solved Bugs, etc..)
-* Easy to use web-based interface, designed with [MaterializeCSS](https://materializecss.com/)
+* Versions basic identifiers: Previous version id, This version id (e.g. From: 3.0.0 To: 3.0.1).
+* Beta versions marking.
+* Version properties: Unique changes that applied in specific version (e.g. Features, Solved Bugs, etc..).
 * Versions search by version-id, version release date, and versions/properties descriptions.
-* Versions/Properties basic pagination.
+* Users privileges:
+    * Admin    -> Full access + Admin panel access.
+    * Manager  -> Create / Delete / Modify versions/properties access.
+    * User     -> Watch access.
+    * Guest    -> Watch access.
+    * Banned   -> No access at all.
+* Admin Panel:
+    * Users control panel (Add / Modify / Remove).
+* Easy to use web-based interface, designed with [MaterializeCSS](https://materializecss.com/)
 * Compatible with offline systems.
 * Cross-Platform application.
 
-## Pictures
-### Versions Overview
-![Version Overview](./images/VersionsTrack-11.png)
-
-### Search section
-![Search section](./images/VersionsTrack-12-Search.png)
-
-### Add new version
-![Add new version](./images/VersionsTrack-13-NewVersion.png)
-
-### Modify version
-![Modify version](./images/VersionsTrack-14-ModifyVersion.png)
-
-### Modify version's property
-![Modify version's property](./images/VersionsTrack-15-ModifyProperty.png)
-
 ## Upcoming features
-* Order properties by type/tests scope.
-* Add generic description options for versions.
 * Limit versions count in a page.
 * Limit properties count in a page.
+* Order properties by type/tests scope.
+* Add generic description options for versions.
 * Properties/Versions short description TAGs.
+* Edit profile:
+    * Edit username/password.
+    * Edit versions_in_page/properties_in_page.
+    * Use user's versions_in_page/properties_in_page properties.
+* Git integration.
+    * Auto properties addition by git commits.
+    * Define commit template, for property type detection.
+        * For example:
+            ```bash
+                git commit -m " Untracked commit info...
+                                ...
+                                ...
+                                *-Feature|Description|TestsScope|Tests Details|Known Issues*-
+                                *-Change|Change Desc|FULL|Some T details-*
+                                *-Deprecated|Details|NONE-*
+                                ...
+                                ...Untracked commit info...
+                                ...
+                                *-Feature|Details|PARTIAL|Details.-*
+                                ...
+                              "
+          ```
+    * Detect the latest checked commit, and follow the new ones [Every git refresh].
 
 ### Next
-* Add users privileges.
-* Add admin panel.
-    * Users control panel
+* Add discussion page for versions/properties.
+* Multiple languages supporting.
+* Users privileges:
+    * User     -> Comment for issues in versions.
+* Admin panel.
     * Background change option.
+* JetBrains integration.
+* Manage multiple projects versions.
+    * Separate access rules for users by projects.
+    * Enable different git follow for each project.
+
+# Pictures
+
+## Search section
+![Search section](images/version2.0.0/VersionsTrack-12-Search.png)
+
+## Guest Access
+### Versions Overview
+![Guest Version Overview](images/version2.0.0/VersionsTrack-21-GuestVersionsList.png)
+
+### Login Page
+![Login Page](images/version2.0.0/VersionsTrack-22-LoginPage.png)
+
+## Manager Access
+### Versions Overview
+![Manager Version Overview](images/version2.0.0/VersionsTrack-24-ManagerAccessAddProperty.png)
+
+### Add new version
+![Add new version](images/version2.0.0/VersionsTrack-210-AddNewVersion.png)
+
+### Modify version
+![Modify version](images/version2.0.0/VersionsTrack-23-ModifyVersion.png)
+
+### Delete version
+![Delete version](images/version2.0.0/VersionsTrack-25-DeleteVersion.png)
+
+## Side Navigation Bar
+![Side Navigation Bar](images/version2.0.0/VersionsTrack-26-SideNav.png)
+
+## Admin Access
+### Admin Panel - Users Management
+#### View Users List
+![Admin Panel](images/version2.0.0/VersionsTrack-27-AdminPanelUsersManagement.png)
+
+#### Modify User
+![Admin Panel](images/version2.0.0/VersionsTrack-28-AdminPanelModifyUser.png)
+
+#### Create New User
+![Admin Panel](images/version2.0.0/VersionsTrack-29-AdminPanelCreateNewUser.png)

@@ -1,5 +1,6 @@
 const responses_gen = require('../helpers/responses');
 let versions_model = require('../models/versions');
+const access_limitations = require('../helpers/configurations/access_limitations');
 
 // API
 
@@ -117,7 +118,12 @@ exports.modify_property = async (req, res, next) => {
 // View
 exports.view_versions = async (req, res, next) => {
     try {
-        res.render("pages/home"/*, {access_level: req.session.user.role}*/);
+        res.render("pages/home", {
+            access_level: req.session.user ? req.session.user.role : 1,
+            is_logged_in: !!req.session.user,
+            username: req.session.user && req.session.user.username,
+            min_access_required: access_limitations.min_access_required
+        });
     } catch (e) {
         return responses_gen.generate_response(res, 400, null, e.message);
     }

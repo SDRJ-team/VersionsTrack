@@ -2745,8 +2745,11 @@ $jscomp.polyfill = function (e, r, p, m) {
         this.dropdownEl.style.left = positionInfo.x + 'px';
         this.dropdownEl.style.top = positionInfo.y + 'px';
         this.dropdownEl.style.height = positionInfo.height + 'px';
-        this.dropdownEl.style.width = positionInfo.width + 'px';
+        this.dropdownEl.style.width = this.options.width ? this.options.width + 'px' : positionInfo.width + 'px'; // Enable Custom width -- Korel
         this.dropdownEl.style.transformOrigin = (positionInfo.horizontalAlignment === 'left' ? '0' : '100%') + " " + (positionInfo.verticalAlignment === 'top' ? '0' : '100%');
+        if (this.options.position) { // Enable Custom position -- Korel
+          this.dropdownEl.style.position = this.options.position;
+        }
       }
 
       /**
